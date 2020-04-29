@@ -169,7 +169,6 @@ export default {
         if (valid) {
           createRole(this.dataForm)
             .then(response => {
-              debugger
               // this.list.unshift(response.data.data)
               this.dialogFormVisible = false
               this.$notify.success({
@@ -225,7 +224,6 @@ export default {
       })
     },
     handleDelete(id) {
-      debugger
       deleteRole(id)
         .then(response => {
           this.$notify.success({
