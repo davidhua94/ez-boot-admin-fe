@@ -39,8 +39,9 @@ service.interceptors.response.use(
       return Promise.reject('error')
     }
 
-    if (res.code !== '200') {
-      if (res.code === '10004') {
+    if (res.code !== '00000') {
+      // 没有登陆
+      if (res.code === 'A0004') {
         MessageBox.alert(res.message, '错误', {
           confirmButtonText: '确定',
           type: 'error'
