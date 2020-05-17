@@ -55,10 +55,9 @@ export function updatePermission(data) {
   })
 }
 
-export function roleOptions(query) {
+export function listRoleOptions() {
   return request({
-    url: '/role/options',
-    method: 'get',
-    params: query
+    url: '/role/listOptions',
+    method: 'get'
   })
 }

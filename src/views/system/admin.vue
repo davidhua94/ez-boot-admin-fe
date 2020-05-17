@@ -5,7 +5,7 @@
     <div class="filter-container">
       <el-input v-model="listQuery.username" clearable class="filter-item" style="width: 200px;" placeholder="请输入管理员名称"/>
       <el-button v-permission="['GET /system/admin/list']" class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">查找</el-button>
-      <!--      <el-button v-permission="['POST /system/admin/create']" class="filter-item" type="primary" icon="el-icon-edit" @click="handleCreate">添加</el-button>-->
+      <el-button v-permission="['POST /system/admin/create']" class="filter-item" type="primary" icon="el-icon-edit" @click="handleCreate">添加</el-button>
       <!--      <el-button :loading="downloadLoading" class="filter-item" type="primary" icon="el-icon-download" @click="handleDownload">导出</el-button>-->
     </div>
 
@@ -28,8 +28,8 @@
 
       <el-table-column align="center" label="操作" class-name="small-padding fixed-width">
         <template slot-scope="scope">
-          <!--          <el-button v-permission="['POST /system/admin/update']" type="primary" size="mini" @click="handleUpdate(scope.row)">编辑</el-button>-->
-          <!--          <el-button v-permission="['POST /system/admin/delete']" type="danger" size="mini" @click="handleDelete(scope.row)">删除</el-button>-->
+          <el-button v-permission="['POST /system/admin/update']" type="primary" size="mini" @click="handleUpdate(scope.row)">编辑</el-button>
+          <el-button v-permission="['POST /system/admin/delete']" type="danger" size="mini" @click="handleDelete(scope.row)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -37,43 +37,42 @@
     <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.pageSize" @pagination="getList" />
 
     <!-- 添加或修改对话框 -->
-    <!--    <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">-->
-    <!--      <el-form ref="dataForm" :rules="rules" :model="dataForm" status-icon label-position="left" label-width="100px" style="width: 400px; margin-left:50px;">-->
-    <!--        <el-form-item label="管理员名称" prop="username">-->
-    <!--          <el-input v-model="dataForm.username"/>-->
-    <!--        </el-form-item>-->
-    <!--        <el-form-item label="管理员密码" prop="password">-->
-    <!--          <el-input v-model="dataForm.password" type="password" auto-complete="off"/>-->
-    <!--        </el-form-item>-->
-    <!--        <el-form-item label="管理员头像" prop="avatar">-->
-    <!--          <el-upload-->
-    <!--            :headers="headers"-->
-    <!--            :action="uploadPath"-->
-    <!--            :show-file-list="false"-->
-    <!--            :on-success="uploadAvatar"-->
-    <!--            class="avatar-uploader"-->
-    <!--            accept=".jpg,.jpeg,.png,.gif">-->
-    <!--            <img v-if="dataForm.avatar" :src="dataForm.avatar" class="avatar">-->
-    <!--            <i v-else class="el-icon-plus avatar-uploader-icon"/>-->
-    <!--          </el-upload>-->
-    <!--        </el-form-item>-->
-    <!--        <el-form-item label="管理员角色" prop="roleIds">-->
-    <!--          <el-select v-model="dataForm.roleIds" multiple placeholder="请选择">-->
-    <!--            <el-option-->
-    <!--              v-for="item in roleOptions"-->
-    <!--              :key="item.value"-->
-    <!--              :label="item.label"-->
-    <!--              :value="item.value"/>-->
-    <!--          </el-select>-->
-    <!--        </el-form-item>-->
-    <!--      </el-form>-->
-    <!--      <div slot="footer" class="dialog-footer">-->
-    <!--        <el-button @click="dialogFormVisible = false">取消</el-button>-->
-    <!--        <el-button v-if="dialogStatus=='create'" type="primary" @click="createData">确定</el-button>-->
-    <!--        <el-button v-else type="primary" @click="updateData">确定</el-button>-->
-    <!--      </div>-->
-    <!--    </el-dialog>-->
-
+    <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
+      <el-form ref="dataForm" :rules="rules" :model="dataForm" status-icon label-position="left" label-width="100px" style="width: 400px; margin-left:50px;">
+        <el-form-item label="管理员名称" prop="username">
+          <el-input v-model="dataForm.username"/>
+        </el-form-item>
+        <el-form-item label="管理员密码" prop="password">
+          <el-input v-model="dataForm.password" type="password" auto-complete="off"/>
+        </el-form-item>
+        <el-form-item label="管理员头像" prop="avatar">
+          <el-upload
+            :headers="headers"
+            :action="uploadPath"
+            :show-file-list="false"
+            :on-success="uploadAvatar"
+            class="avatar-uploader"
+            accept=".jpg,.jpeg,.png,.gif">
+            <img v-if="dataForm.avatar" :src="dataForm.avatar" class="avatar">
+            <i v-else class="el-icon-plus avatar-uploader-icon"/>
+          </el-upload>
+        </el-form-item>
+        <el-form-item label="管理员角色" prop="roleIds">
+          <el-select v-model="dataForm.roleIds" multiple placeholder="请选择">
+            <el-option
+              v-for="item in roleOptions"
+              :key="item.id"
+              :label="item.roleName"
+              :value="item.id"/>
+          </el-select>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisible = false">取消</el-button>
+        <el-button v-if="dialogStatus=='create'" type="primary" @click="createData">确定</el-button>
+        <el-button v-else type="primary" @click="updateData">确定</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -104,10 +103,10 @@
 </style>
 
 <script>
-//, createAdmin, updateAdmin, deleteAdmin
-import { listAdmin } from '@/api/admin'
-// import { roleOptions } from '@/api/role'
-// import { uploadPath } from '@/api/storage'
+//
+import { listAdmin, createAdmin, updateAdmin, deleteAdmin } from '@/api/admin'
+import { listRoleOptions } from '@/api/role'
+import { uploadPath } from '@/api/storage'
 import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
 
 export default {
@@ -115,7 +114,7 @@ export default {
   components: { Pagination },
   data() {
     return {
-      // uploadPath,
+      uploadPath,
       list: null,
       total: 0,
       roleOptions: null,
@@ -152,6 +151,7 @@ export default {
   },
   created() {
     this.getList()
+    this.getRoleList()
   },
   methods: {
     getList() {
@@ -171,114 +171,124 @@ export default {
     handleFilter() {
       this.listQuery.page = 1
       this.getList()
+    },
+    resetForm() {
+      this.dataForm = {
+        id: undefined,
+        username: undefined,
+        password: undefined,
+        avatar: undefined,
+        roleIds: []
+      }
+    },
+    uploadAvatar: function(response) {
+      this.dataForm.avatar = response.data.url
+    },
+    handleCreate() {
+      this.resetForm()
+      this.dialogStatus = 'create'
+      this.dialogFormVisible = true
+      this.$nextTick(() => {
+        this.$refs['dataForm'].clearValidate()
+      })
+    },
+    createData() {
+      this.$refs['dataForm'].validate(valid => {
+        if (valid) {
+          createAdmin(this.dataForm)
+            .then(response => {
+              this.list.unshift(response.data.data)
+              this.dialogFormVisible = false
+              this.$notify.success({
+                title: '成功',
+                message: '添加管理员成功'
+              })
+            })
+            .catch(response => {
+              this.$notify.error({
+                title: '失败',
+                message: response.data.errmsg
+              })
+            })
+        }
+      })
+    },
+    handleUpdate(row) {
+      this.dataForm = Object.assign({}, row)
+      this.dialogStatus = 'update'
+      this.dialogFormVisible = true
+      this.$nextTick(() => {
+        this.$refs['dataForm'].clearValidate()
+      })
+    },
+    updateData() {
+      this.$refs['dataForm'].validate(valid => {
+        if (valid) {
+          updateAdmin(this.dataForm)
+            .then(() => {
+              for (const v of this.list) {
+                if (v.id === this.dataForm.id) {
+                  const index = this.list.indexOf(v)
+                  this.list.splice(index, 1, this.dataForm)
+                  break
+                }
+              }
+              this.dialogFormVisible = false
+              this.$notify.success({
+                title: '成功',
+                message: '更新管理员成功'
+              })
+            })
+            .catch(response => {
+              this.$notify.error({
+                title: '失败',
+                message: response.data.errmsg
+              })
+            })
+        }
+      })
+    },
+    handleDelete(row) {
+      deleteAdmin(row)
+        .then(response => {
+          this.$notify.success({
+            title: '成功',
+            message: '删除管理员成功'
+          })
+          const index = this.list.indexOf(row)
+          this.list.splice(index, 1)
+        })
+        .catch(response => {
+          this.$notify.error({
+            title: '失败',
+            message: response.data.errmsg
+          })
+        })
+    },
+    handleDownload() {
+      this.downloadLoading = true
+      import('@/vendor/Export2Excel').then(excel => {
+        const tHeader = ['管理员ID', '管理员名称', '管理员头像']
+        const filterVal = ['id', 'username', 'avatar']
+        excel.export_json_to_excel2(
+          tHeader,
+          this.list,
+          filterVal,
+          '管理员信息'
+        )
+        this.downloadLoading = false
+      })
+    },
+    getRoleList() {
+      listRoleOptions()
+        .then(response => {
+          // 获取成功
+          this.roleOptions = response.data
+        })
+        .catch(response => {
+          // 获取角色失败
+        })
     }
-    // resetForm() {
-    //   this.dataForm = {
-    //     id: undefined,
-    //     username: undefined,
-    //     password: undefined,
-    //     avatar: undefined,
-    //     roleIds: []
-    //   }
-    // },
-    // uploadAvatar: function(response) {
-    //   this.dataForm.avatar = response.data.url
-    // },
-    // handleCreate() {
-    //   this.resetForm()
-    //   this.dialogStatus = 'create'
-    //   this.dialogFormVisible = true
-    //   this.$nextTick(() => {
-    //     this.$refs['dataForm'].clearValidate()
-    //   })
-    // },
-    // createData() {
-    //   this.$refs['dataForm'].validate(valid => {
-    //     if (valid) {
-    //       createAdmin(this.dataForm)
-    //         .then(response => {
-    //           this.list.unshift(response.data.data)
-    //           this.dialogFormVisible = false
-    //           this.$notify.success({
-    //             title: '成功',
-    //             message: '添加管理员成功'
-    //           })
-    //         })
-    //         .catch(response => {
-    //           this.$notify.error({
-    //             title: '失败',
-    //             message: response.data.errmsg
-    //           })
-    //         })
-    //     }
-    //   })
-    // },
-    // handleUpdate(row) {
-    //   this.dataForm = Object.assign({}, row)
-    //   this.dialogStatus = 'update'
-    //   this.dialogFormVisible = true
-    //   this.$nextTick(() => {
-    //     this.$refs['dataForm'].clearValidate()
-    //   })
-    // },
-    // updateData() {
-    //   this.$refs['dataForm'].validate(valid => {
-    //     if (valid) {
-    //       updateAdmin(this.dataForm)
-    //         .then(() => {
-    //           for (const v of this.list) {
-    //             if (v.id === this.dataForm.id) {
-    //               const index = this.list.indexOf(v)
-    //               this.list.splice(index, 1, this.dataForm)
-    //               break
-    //             }
-    //           }
-    //           this.dialogFormVisible = false
-    //           this.$notify.success({
-    //             title: '成功',
-    //             message: '更新管理员成功'
-    //           })
-    //         })
-    //         .catch(response => {
-    //           this.$notify.error({
-    //             title: '失败',
-    //             message: response.data.errmsg
-    //           })
-    //         })
-    //     }
-    //   })
-    // },
-    // handleDelete(row) {
-    //   deleteAdmin(row)
-    //     .then(response => {
-    //       this.$notify.success({
-    //         title: '成功',
-    //         message: '删除管理员成功'
-    //       })
-    //       const index = this.list.indexOf(row)
-    //       this.list.splice(index, 1)
-    //     })
-    //     .catch(response => {
-    //       this.$notify.error({
-    //         title: '失败',
-    //         message: response.data.errmsg
-    //       })
-    //     })
-    // },
-    // handleDownload() {
-    //   this.downloadLoading = true
-    //   import('@/vendor/Export2Excel').then(excel => {
-    //     const tHeader = ['管理员ID', '管理员名称', '管理员头像']
-    //     const filterVal = ['id', 'username', 'avatar']
-    //     excel.export_json_to_excel2(
-    //       tHeader,
-    //       this.list,
-    //       filterVal,
-    //       '管理员信息'
-    //     )
-    //     this.downloadLoading = false
-    //   })
-    // }
   }
 }
 </script>
