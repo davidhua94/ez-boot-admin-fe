@@ -127,9 +127,6 @@ export default {
   },
   methods: {
     getList() {
-      console.log('query role list')
-      console.log('query role list222')
-      alert("112")
       this.listLoading = true
       listRole(this.listQuery)
         .then(response => {
